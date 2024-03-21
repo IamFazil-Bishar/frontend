@@ -10,9 +10,6 @@ const FeatruedTourList = () => {
 
   console.log("Featured Tours:", featuredTours);
 
-  // Ensure featuredTours is an array, otherwise return an empty array
-  const toursArray = Array.isArray(featuredTours) ? featuredTours : [];
-
   return (
     <>
       {
@@ -22,7 +19,7 @@ const FeatruedTourList = () => {
         error && <h4>{error}</h4>
       }
       {
-        toursArray.map(tour => (
+        featuredTours.map(tour => (
           <Col lg="3" md="6" sm="6" className='mb-4' key={tour._id}>
             <TourCard tour={tour}/>
           </Col>
