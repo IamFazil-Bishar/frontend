@@ -21,7 +21,7 @@ const Tours = () => {
 
   useEffect(() => {
     const pages = Math.ceil(tourCount / 8);
-    setPageCount(pages > 0 ? pages : 0); // Ensure pageCount is non-negative
+    setPageCount(pages);
     window.scrollTo(0, 0);
   }, [page, tourCount, tours]);
 
@@ -48,16 +48,19 @@ const Tours = () => {
                     <TourCard tour={tour} />
                   </Col>
                 ))}
-
+            </Row>
+          )}
+          {pageCount > 0 && (
+            <Row>
               <Col lg="12">
                 <div className="pagination d-flex align-items-center justify-content-center mt-4 gap-3">
-                  {Array.from({ length: pageCount }).map((_, index) => (
+                  {[...Array(pageCount).keys()].map((number) => (
                     <span
-                      key={index}
-                      onClick={() => setPage(index)}
-                      className={page === index ? "active__page" : ""}
+                      key={number}
+                      onClick={() => setPage(number)}
+                      className={page === number ? "active__page" : ""}
                     >
-                      {index + 1}
+                      {number + 1}
                     </span>
                   ))}
                 </div>
