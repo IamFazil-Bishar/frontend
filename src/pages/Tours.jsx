@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import CommonSection from "../shared/CommonSection";
-
 import "../styles/tour.css";
-import TourCard from "./../shared/TourCard";
-import SearchBar from "./../shared/SearchBar";
-import NewsLetter from "./../shared/Newsletter";
+import TourCard from "../shared/TourCard";
+import SearchBar from "../shared/SearchBar";
+import NewsLetter from "../shared/Newsletter";
 import { Container, Row, Col } from "reactstrap";
-
 import useFetch from "../hooks/useFetch";
 import { BASE_URL } from "../utils/config";
 
@@ -23,7 +21,7 @@ const Tours = () => {
 
   useEffect(() => {
     const pages = Math.ceil(tourCount / 8);
-    setPageCount(pages);
+    setPageCount(pages > 0 ? pages : 0); // Ensure pageCount is non-negative
     window.scrollTo(0, 0);
   }, [page, tourCount, tours]);
 
@@ -44,21 +42,22 @@ const Tours = () => {
           {error && <h4 className="text-center pt-5">{error}</h4>}
           {!loading && !error && (
             <Row>
-              {Array.isArray(tours) && tours.map((tour) => (
-                <Col lg="3" md="6" sm="6" className="mb-4" key={tour._id}>
-                  <TourCard tour={tour} />
-                </Col>
-              ))}
+              {Array.isArray(tours) &&
+                tours.map((tour) => (
+                  <Col lg="3" md="6" sm="6" className="mb-4" key={tour._id}>
+                    <TourCard tour={tour} />
+                  </Col>
+                ))}
 
               <Col lg="12">
                 <div className="pagination d-flex align-items-center justify-content-center mt-4 gap-3">
-                  {[...Array(pageCount).keys()].map((number) => (
+                  {Array.from({ length: pageCount }).map((_, index) => (
                     <span
-                      key={number}
-                      onClick={() => setPage(number)}
-                      className={page === number ? "active__page" : ""}
+                      key={index}
+                      onClick={() => setPage(index)}
+                      className={page === index ? "active__page" : ""}
                     >
-                      {number + 1}
+                      {index + 1}
                     </span>
                   ))}
                 </div>
