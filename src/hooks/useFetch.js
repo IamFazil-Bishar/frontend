@@ -14,6 +14,8 @@ const useFetch = (url) => {
         const res = await axios.get(url);
         const responseData = res.data; // Extract the response data
 
+        console.log("Response Data:", responseData); // Log the response data
+
         // Check if the response data is an array
         if (Array.isArray(responseData)) {
           setData(responseData); // Set the data to the response data
@@ -25,6 +27,7 @@ const useFetch = (url) => {
 
         setLoading(false);
       } catch (err) {
+        console.error("Fetch Error:", err); // Log the fetch error
         setError(err.message);
         setLoading(false);
       }
