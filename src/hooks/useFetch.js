@@ -12,11 +12,17 @@ const useFetch = (url) => {
 
       try {
         const res = await axios.get(url);
+        const responseData = res.data; // Extract the response data
 
-        if (!res.data) {
-          setError("Failed to fetch data");
+        // Check if the response data is an array
+        if (Array.isArray(responseData)) {
+          setData(responseData); // Set the data to the response data
+          setError(null); // Reset error
+        } else {
+          // If the response data is not an array, handle the error
+          setError("Invalid data format");
         }
-        setData(res.data);
+
         setLoading(false);
       } catch (err) {
         setError(err.message);
