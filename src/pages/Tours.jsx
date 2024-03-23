@@ -16,9 +16,12 @@ const Tours = () => {
   const { data: tourCount, loading: tourCountLoading, error: tourCountError } = useFetch(`${BASE_URL}/tours/search/getTourCount`);
 
   useEffect(() => {
-    if (!tourCountLoading && !tourCountError && tourCount && tourCount.success) {
-      const pages = Math.ceil(tourCount.data / 8);
-      setPageCount(pages);
+    if (!tourCountLoading && !tourCountError) {
+      if (Array.isArray(tourCount) && tourCount.length === 0) {
+        setPageCount(0);
+      } else if (tourCount && tourCount.success) {
+        setPageCount(Math.ceil(tourCount.data / 8));
+      }
       window.scrollTo(0, 0);
     }
   }, [page, tourCount, tourCountLoading, tourCountError]);
