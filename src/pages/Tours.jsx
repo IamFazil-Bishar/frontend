@@ -17,11 +17,11 @@ const Tours = () => {
 
   useEffect(() => {
     console.log("Fetching tours data...");
-    console.log("Tour count:", tourCount); // Check if tourCount is retrieved successfully
-    console.log("Tours:", tours); // Check if tours data is retrieved successfully
+    console.log("Tour count:", tourCount);
+    console.log("Tours:", tours);
     console.log("Loading:", loading);
     console.log("Error:", error);
-
+  
     if (!tourCountLoading && !tourCountError) {
       if (Array.isArray(tourCount) && tourCount.length === 0) {
         setPageCount(0);
