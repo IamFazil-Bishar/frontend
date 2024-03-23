@@ -16,11 +16,11 @@ const Tours = () => {
   const { data: tourCount, loading: tourCountLoading, error: tourCountError } = useFetch(`${BASE_URL}/tours/search/getTourCount`);
 
   useEffect(() => {
-    console.log("Fetching tours data...");
-    console.log("Tour count:", tourCount);
-    console.log("Tours:", tours);
-    console.log("Loading:", loading);
-    console.log("Error:", error);
+    // console.log("Fetching tours data...");
+    // console.log("Tour count:", tourCount);
+    // console.log("Tours:", tours);
+    // console.log("Loading:", loading);
+    // console.log("Error:", error);
   
     if (!tourCountLoading && !tourCountError) {
       if (Array.isArray(tourCount) && tourCount.length === 0) {
