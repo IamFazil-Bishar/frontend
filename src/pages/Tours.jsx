@@ -16,6 +16,12 @@ const Tours = () => {
   const { data: tourCount, loading: tourCountLoading, error: tourCountError } = useFetch(`${BASE_URL}/tours/search/getTourCount`);
 
   useEffect(() => {
+    console.log("Fetching tours data...");
+    console.log("Tour count:", tourCount); // Check if tourCount is retrieved successfully
+    console.log("Tours:", tours); // Check if tours data is retrieved successfully
+    console.log("Loading:", loading);
+    console.log("Error:", error);
+
     if (!tourCountLoading && !tourCountError) {
       if (Array.isArray(tourCount) && tourCount.length === 0) {
         setPageCount(0);
@@ -24,7 +30,7 @@ const Tours = () => {
       }
       window.scrollTo(0, 0);
     }
-  }, [page, tourCount, tourCountLoading, tourCountError]);
+  }, [page, tourCount, tourCountLoading, tourCountError, tours, loading, error]);
 
   return (
     <>
