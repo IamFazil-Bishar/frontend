@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 
-const useFetch = (url, page) => {
+const useFetch = (url) => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -11,21 +10,22 @@ const useFetch = (url, page) => {
       setLoading(true);
 
       try {
-        const res = await axios.get(url);
-        const responseData = res.data;
+        const res = await fetch(url);
 
-        setData(responseData.data); // Set the data to responseData.data
-        setError(null);
-        setLoading(false);
+        if (!res.ok) {
+          setError("failed to fetch");
+        }
+        const result = await res.json();
+        setData(result.data);
+        setLoading(false)
       } catch (err) {
-        console.error("Fetch Error:", err);
         setError(err.message);
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [url, page]);
+  }, [url]);
 
   return {
     data,

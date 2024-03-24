@@ -48,30 +48,33 @@ const Header = () => {
   useEffect(() => {
     stickyHeaderFunc();
 
-    return () => window.removeEventListener("scroll", stickyHeaderFunc);
-  }, []); // Empty dependency array to ensure the effect runs only once
+    return window.removeEventListener("scroll", stickyHeaderFunc);
+  });
 
-  const toggleMenu = () => menuRef.current.classList.toggle("show__menu");
+  const toggleMenu = ()=> menuRef.current.classList.toggle('show__menu')
 
   return (
     <header className="header" ref={headerRef}>
       <Container>
         <Row>
           <div className="nav__wrapper d-flex align-items-center justify-content-between">
-            {/* Logo */}
+            {/* Logo  */}
             <div className="logo">
               <img src={logo} alt="" />
             </div>
-            {/* Logo End */}
+            {/* Logo End  */}
 
-            {/* Menu */}
+            {/* Menu  */}
+
             <div className="navigation" ref={menuRef} onClick={toggleMenu}>
               <ul className="menu d-flex align-items-center gap-5">
                 {nav__links.map((item, index) => (
                   <li className="nav__item" key={index}>
                     <NavLink
                       to={item.path}
-                      activeClassName="active__link" // Use activeClassName to apply active class
+                      className={(navClass) =>
+                        navClass.isActive ? "active__link" : ""
+                      }
                     >
                       {item.dispaly}
                     </NavLink>
@@ -79,7 +82,8 @@ const Header = () => {
                 ))}
               </ul>
             </div>
-            {/* Menu End */}
+
+            {/* Menu End  */}
 
             <div className="nav__right d-flex align-items-center gap-4">
               <div className="nav__btns d-flex align-items-center gap-4 ">
@@ -103,7 +107,7 @@ const Header = () => {
               </div>
 
               <span className="mobile__menu" onClick={toggleMenu}>
-                <i className="ri-menu-line"></i> {/* Use className instead of class */}
+                <i class="ri-menu-line"></i>
               </span>
             </div>
           </div>
