@@ -33,7 +33,7 @@ const useFetch = (url) => {
     };
 
     fetchData();
-  }, [url, user?.token]); // Include user token in dependencies
+  }, [url, user?.token]); // Include user token in dependencies .
 
   return { data, loading, error };
 };
