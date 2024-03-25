@@ -1,41 +1,37 @@
-import { useState, useEffect, useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { useState, useEffect } from "react";
 
 const useFetch = (url) => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
 
       try {
-        const res = await fetch(url, {
-          headers: {
-            Authorization: `Bearer ${user?.token}`, // Ensure user token is included
-          },
-          credentials: 'include' // Add credentials: 'include' for CORS requests
-        });
+        const res = await fetch(url);
 
         if (!res.ok) {
-          throw new Error("Failed to fetch data");
+          setError("failed to fetch");
         }
-
         const result = await res.json();
         setData(result.data);
-      } catch (error) {
-        setError(error.message); // Update error state with descriptive message
-      } finally {
+        setLoading(false)
+      } catch (err) {
+        setError(err.message);
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [url, user?.token]); // Include user token in dependencies .
+  }, [url]);
 
-  return { data, loading, error };
+  return {
+    data,
+    error,
+    loading,
+  };
 };
 
 export default useFetch;
