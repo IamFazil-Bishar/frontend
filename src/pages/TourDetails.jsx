@@ -12,27 +12,13 @@ import { AuthContext } from "./../context/AuthContext";
 
 const TourDetails = () => {
   const { id } = useParams();
+
+  const reviewMsgRef = useRef("");
+  const [tourRating, setTourRating] = useState(null);
   const { user } = useContext(AuthContext);
+
+  // fetch data from database
   const { data: tour, loading, error } = useFetch(`${BASE_URL}/tours/${id}`, user?.token);
-
-  // Handle loading state
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  // Handle error state
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
-  // Handle null tour object
-  if (!tour) {
-    return <div>Tour not found</div>;
-  }
-
-  // Destructure tour object properties
-  // const { photo, title, desc, price, address, reviews, city, distance, maxGroupSize } = tour;
-
 
   // desstructure propertys from tour object
   const {
