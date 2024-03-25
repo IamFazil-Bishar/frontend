@@ -1,6 +1,4 @@
-import { useState, useEffect } from "react";
-
-const useFetch = (url) => {
+const useFetch = (url, token) => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -10,7 +8,14 @@ const useFetch = (url) => {
       setLoading(true);
 
       try {
-        const res = await fetch(url);
+        const headers = {};
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        const res = await fetch(url, {
+          headers,
+        });
 
         if (!res.ok) {
           setError("failed to fetch");
@@ -25,7 +30,7 @@ const useFetch = (url) => {
     };
 
     fetchData();
-  }, [url]);
+  }, [url, token]);
 
   return {
     data,
@@ -33,5 +38,3 @@ const useFetch = (url) => {
     loading,
   };
 };
-
-export default useFetch;
