@@ -12,34 +12,28 @@ const useFetch = (url) => {
       setLoading(true);
 
       try {
-        if (!user || !user.token) {
-          // Handle the case where the user or user.token is null
-          throw new Error("User not authenticated");
-        }
-
         const res = await fetch(url, {
           headers: {
-            Authorization: `Bearer ${user.token}`,
+            Authorization: `Bearer ${user?.token}`, // Ensure user token is included
           },
-          credentials: 'include', // Include credentials such as cookies
+          credentials: 'include' // Add credentials: 'include' for CORS requests
         });
 
         if (!res.ok) {
-          setError("Failed to fetch data");
-          return;
+          throw new Error("Failed to fetch data");
         }
 
         const result = await res.json();
         setData(result.data);
       } catch (error) {
-        setError(error.message);
+        setError(error.message); // Update error state with descriptive message
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [url, user]);
+  }, [url, user?.token]); // Include user token in dependencies
 
   return { data, loading, error };
 };
