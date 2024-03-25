@@ -15,7 +15,7 @@ const TourDetails = () => {
 
   const reviewMsgRef = useRef("");
   const [tourRating, setTourRating] = useState(null);
-  const { user } = useContext(AuthContext);
+  const { user, authToken } = useContext(AuthContext);
 
   // fetch data from database
   const { data: tour, loading, error } = useFetch(`${BASE_URL}/tours/${id}`);
@@ -38,39 +38,42 @@ const TourDetails = () => {
   // formate date
   const options = { day: "numeric", month: "long", year: "numeric" };
 
-  // submit request to the server
-  const submitHandler = async (e) => {
-    e.preventDefault();
-    const reviewText = reviewMsgRef.current.value;
+ // submit request to the server
+const submitHandler = async (e) => {
+  e.preventDefault();
+  const reviewText = reviewMsgRef.current.value;
 
-    try {
-      if (!user || user === undefined || user === null) {
-        alert("please sign in");
-      }
-
-      const reviewObj = {
-        username: user?.username,
-        reviewText,
-        rating: tourRating,
-      };
-      const res = await fetch(`${BASE_URL}/review/${id}`, {
-        method: "post",
-        headers: {
-          "content-type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(reviewObj),
-      });
-
-      const result = await res.json();
-      if (!res.ok) {
-        return alert(result.message);
-      }
-      alert(result.message);
-    } catch (err) {
-      alert(err.message);
+  try {
+    if (!user || user === undefined || user === null) {
+      alert("Please sign in");
+      return;
     }
-  };
+
+    const reviewObj = {
+      username: user?.username,
+      reviewText,
+      rating: tourRating,
+    };
+
+    const res = await fetch(`${BASE_URL}/review/${id}`, {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`, // Include the authentication token in headers
+      },
+      credentials: "include",
+      body: JSON.stringify(reviewObj),
+    });
+
+    const result = await res.json();
+    if (!res.ok) {
+      return alert(result.message);
+    }
+    alert(result.message);
+  } catch (err) {
+    alert(err.message);
+  }
+};
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -215,3 +218,4 @@ const TourDetails = () => {
 };
 
 export default TourDetails;
+
