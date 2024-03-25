@@ -58,7 +58,7 @@ const TourDetails = () => {
         headers: {
           "content-type": "application/json",
         },
-        credentials: "include",
+        credentials: true,
         body: JSON.stringify(reviewObj),
       });
 
