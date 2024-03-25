@@ -193,7 +193,7 @@ const TourDetails = () => {
                                 {review.rating} <i class="ri-star-s-fill"></i>
                               </span>
                             </div>
-                            <h6>Amazing Tour</h6>
+                            <h6>{review.reviewText}</h6>
                           </div>
                         </div>
                       ))}
