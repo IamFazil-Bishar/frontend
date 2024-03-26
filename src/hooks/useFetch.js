@@ -11,6 +11,7 @@ const useFetch = (url, token) => {
         const headers = {};
         if (token) {
           headers['Authorization'] = `Bearer ${token}`;
+          console.log("Token fetch:",token)
         }
 
         const res = await fetch(url, {
