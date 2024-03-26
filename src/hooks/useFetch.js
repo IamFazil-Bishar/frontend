@@ -1,37 +1,32 @@
-import { useState, useEffect } from "react";
+import { useContext } from "react";
+import { AuthContext } from "./AuthContext";
 
 const useFetch = (url) => {
-  const [data, setData] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const { state } = useContext(AuthContext);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
+  const fetchData = async () => {
+    try {
+      const accessToken = state.user ? state.user.accessToken : null;
 
-      try {
-        const res = await fetch(url,{credentials:'include'});
+      const response = await fetch(url, {
+        headers: {
+          Authorization: accessToken ? `Bearer ${accessToken}` : "",
+          "Content-Type": "application/json",
+        },
+      });
 
-        if (!res.ok) {
-          setError("failed to fetch");
-        }
-        const result = await res.json();
-        setData(result.data);
-        setLoading(false)
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
       }
-    };
 
-    fetchData();
-  }, [url]);
-
-  return {
-    data,
-    error,
-    loading,
+      return await response.json();
+    } catch (error) {
+      console.error("Error:", error.message);
+      return { error: error.message };
+    }
   };
+
+  return { fetchData };
 };
 
 export default useFetch;

@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useContext } from "react";
 import { Container, Row, Button } from "reactstrap";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "./../../context/AuthContext";
+import YourComponent from "../../pages/yourComponent"; // Import YourComponent.js
 
 import logo from "../../assets/images/travo_3.png";
 import "./header.css";
@@ -29,7 +30,13 @@ const Header = () => {
 
   const logout = () => {
     dispatch({ type: "LOGOUT" });
-    navigate("/");
+    localStorage.removeItem("user"); // Remove user from local storage
+    navigate("/"); // Redirect to home page after logout
+  };
+
+  // Add login function
+  const login = () => {
+    navigate("/login"); // Redirect to login page when Login button is clicked
   };
 
   const stickyHeaderFunc = () => {
@@ -39,7 +46,7 @@ const Header = () => {
     };
 
     window.addEventListener("scroll", handleScroll);
-    
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
@@ -84,8 +91,8 @@ const Header = () => {
                   </>
                 ) : (
                   <>
-                    <Button className="btn secondary__btn">
-                      <Link to="/login">Login</Link>
+                    <Button className="btn secondary__btn" onClick={login}>
+                      Login
                     </Button>
                     <Button className="btn primary__btn">
                       <Link to="/register">Register</Link>
@@ -100,6 +107,8 @@ const Header = () => {
           </div>
         </Row>
       </Container>
+      {/* Render YourComponent */}
+      <YourComponent />
     </header>
   );
 };
