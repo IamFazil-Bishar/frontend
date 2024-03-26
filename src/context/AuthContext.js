@@ -1,10 +1,7 @@
-import { createContext, useEffect, useReducer } from "react";
+import { createContext, useEffect, useReducer, useState } from "react";
 
 const initial_state = {
-  user:
-    localStorage.getItem("user") !== undefined
-      ? JSON.parse(localStorage.getItem("user"))
-      : null,
+  user: localStorage.getItem("user") !== null ? JSON.parse(localStorage.getItem("user")) : null,
   loading: false,
   error: null,
 };
@@ -15,35 +12,36 @@ const AuthReducer = (state, action) => {
   switch (action.type) {
     case "LOGIN_START":
       return {
-        user: null,
-        loading: false,
+        ...state,
+        loading: true,
         error: null,
       };
     case "LOGIN_SUCCESS":
       return {
+        ...state,
         user: action.payload,
         loading: false,
         error: null,
       };
     case "LOGIN_FAILURE":
       return {
-        user: null,
+        ...state,
         loading: false,
         error: action.payload,
       };
     case "REGISTER_SUCCESS":
       return {
-        user: null,
+        ...state,
         loading: false,
         error: null,
       };
     case "LOGOUT":
       return {
+        ...state,
         user: null,
         loading: false,
         error: null,
       };
-
     default:
       return state;
   }
@@ -51,10 +49,23 @@ const AuthReducer = (state, action) => {
 
 export const AuthContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AuthReducer, initial_state);
+  const [accessToken, setAccessToken] = useState(localStorage.getItem("accessToken"));
 
   useEffect(() => {
     localStorage.setItem("user", JSON.stringify(state.user));
   }, [state.user]);
+
+  useEffect(() => {
+    if (accessToken) {
+      localStorage.setItem("accessToken", accessToken);
+    } else {
+      localStorage.removeItem("accessToken");
+    }
+  }, [accessToken]);
+
+  const removeAccessToken = () => {
+    setAccessToken(null);
+  };
 
   return (
     <AuthContext.Provider
@@ -63,6 +74,9 @@ export const AuthContextProvider = ({ children }) => {
         loading: state.loading,
         error: state.error,
         dispatch,
+        accessToken,
+        setAccessToken,
+        removeAccessToken,
       }}
     >
       {children}
